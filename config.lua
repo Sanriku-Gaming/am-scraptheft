@@ -1,12 +1,20 @@
 Config = {}
 
-Config.MinCops = 1 --Minimum cops on duty, TODO
-Config.CopsChance = 0.5 --Chance of cops being called, ranges from 0.0 to 1.0
-Config.Dispatch = 'ps-dispatch'
+Config.Debug = false                    -- If true, adds prints and ignores cop check
 
-Config.ScrapTime = 30000 --Time in miliseconds to steal scraps
-Config.ItemNeeded = 'oxycutter'
+Config.MinCops = 2                      -- Minimum cops on duty, TODO
+Config.DayChance = 60                   -- Chance to alert cops during the day (out of 100)
+Config.NightChance = 20                 -- Chance to alert cops during the night (out of 100)
+Config.NearbyPed = true                 -- Require a ped nearby to alert cops? (if true, replaces the Day/Night Chances of alerting)
+Config.PedDistance = 40.0               -- Radius to check for nearby ped.
+Config.Dispatch = 'cd_dispatch'         -- ps-dispatch or cd_dispatch
 
+Config.ItemNeeded = 'oxycutter'         -- Item for qb-target interaction
+Config.ScrapTime = {                    -- Time in seconds to steal scraps
+  ['small'] = 30,
+  ['medium'] = 45,
+  ['large'] = 60,
+}
 
 Config.DispatchCaller = {
     'John',
@@ -44,147 +52,223 @@ Config.DispatchMsg = {
 }
 
 Config.ScrapObjects = {
-
-    [1] = {
-        ['name'] = 'prop_aircon_l_01', -- Prop Model Name
-        ['minRewards'] = 1, --Minimum amount of different rewards
-        ['maxRewards'] = 3, --Max amount of different rewards
-        ['rewards'] = {
-            [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
-            [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
-            [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 25},
-            [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
-
-        },
+  [1] = {
+    ['name'] = 'prop_aircon_l_01', -- Prop Model Name
+    ['size'] = 'large', -- Prop size (for progressbar time)
+    ['minRewards'] = 2, --Minimum amount of different rewards
+    ['maxRewards'] = 4, --Max amount of different rewards
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 3, ['max'] = 5},
+      [2] = {['item'] = 'metalscrap', ['min'] = 6, ['max'] =8},
+      [3] = {['item'] = 'copper', ['min'] = 5, ['max'] = 30},
+      [4] = {['item'] = 'rubber', ['min'] = 4, ['max'] = 7},
+      [5] = {['item'] = 'aluminum', ['min'] = 2, ['max'] = 5},
+      [6] = {['item'] = 'steel', ['min'] = 2, ['max'] = 5},
     },
+  },
 
-    [2] = {
-        ['name'] = 'prop_aircon_l_02', -- Prop Model Name
-        ['minRewards'] = 1, --Minimum amount of different rewards
-        ['maxRewards'] = 3, --Max amount of different rewards
-        ['rewards'] = {
-            [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
-            [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
-            [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 25},
-            [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
+  [2] = {
+    ['name'] = 'prop_aircon_l_02',
+    ['size'] = 'large',
+    ['minRewards'] = 2,
+    ['maxRewards'] = 4,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 3, ['max'] = 5},
+      [2] = {['item'] = 'metalscrap', ['min'] = 6, ['max'] =8},
+      [3] = {['item'] = 'copper', ['min'] = 5, ['max'] = 30},
+      [4] = {['item'] = 'rubber', ['min'] = 4, ['max'] = 7},
+      [5] = {['item'] = 'aluminum', ['min'] = 2, ['max'] = 5},
+      [6] = {['item'] = 'steel', ['min'] = 2, ['max'] = 5},
+    }
+  },
 
-        },
+  [3] = {
+    ['name'] = 'prop_aircon_l_03',
+    ['size'] = 'large',
+    ['minRewards'] = 2,
+    ['maxRewards'] = 4,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 3, ['max'] = 5},
+      [2] = {['item'] = 'metalscrap', ['min'] = 6, ['max'] =8},
+      [3] = {['item'] = 'copper', ['min'] = 5, ['max'] = 30},
+      [4] = {['item'] = 'rubber', ['min'] = 4, ['max'] = 7},
+      [5] = {['item'] = 'aluminum', ['min'] = 2, ['max'] = 5},
+      [6] = {['item'] = 'steel', ['min'] = 2, ['max'] = 5},
+    }
+  },
+
+  [4] = {
+    ['name'] = 'prop_aircon_l_03_dam',
+    ['size'] = 'large',
+    ['minRewards'] = 2,
+    ['maxRewards'] = 4,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 3, ['max'] = 5},
+      [2] = {['item'] = 'metalscrap', ['min'] = 6, ['max'] =8},
+      [3] = {['item'] = 'copper', ['min'] = 5, ['max'] = 30},
+      [4] = {['item'] = 'rubber', ['min'] = 4, ['max'] = 7},
+      [5] = {['item'] = 'aluminum', ['min'] = 2, ['max'] = 5},
+      [6] = {['item'] = 'steel', ['min'] = 2, ['max'] = 5},
+    }
+  },
+
+  [5] = {
+    ['name'] = 'prop_aircon_l_04',
+    ['size'] = 'large',
+    ['minRewards'] = 2,
+    ['maxRewards'] = 4,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 3, ['max'] = 5},
+      [2] = {['item'] = 'metalscrap', ['min'] = 6, ['max'] =8},
+      [3] = {['item'] = 'copper', ['min'] = 5, ['max'] = 30},
+      [4] = {['item'] = 'rubber', ['min'] = 4, ['max'] = 7},
+      [5] = {['item'] = 'aluminum', ['min'] = 2, ['max'] = 5},
+      [6] = {['item'] = 'steel', ['min'] = 2, ['max'] = 5},
+    }
+  },
+
+  [6] = {
+    ['name'] = 'prop_aircon_m_01',
+    ['size'] = 'medium',
+    ['minRewards'] = 1,
+    ['maxRewards'] = 3,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
+      [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
+      [3] = {['item'] = 'copper', ['min'] = 3, ['max'] = 20},
+      [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
     },
+  },
 
-    [3] = {
-        ['name'] = 'prop_aircon_l_03', -- Prop Model Name
-        ['minRewards'] = 1, --Minimum amount of different rewards
-        ['maxRewards'] = 3, --Max amount of different rewards
-        ['rewards'] = {
-            [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
-            [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
-            [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 25},
-            [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
-
-        },
+  [7] = {
+    ['name'] = 'prop_aircon_m_02',
+    ['size'] = 'medium',
+    ['minRewards'] = 1,
+    ['maxRewards'] = 3,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
+      [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
+      [3] = {['item'] = 'copper', ['min'] = 3, ['max'] = 20},
+      [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
     },
+  },
 
-    [4] = {
-        ['name'] = 'prop_aircon_l_03_dam', -- Prop Model Name
-        ['minRewards'] = 1, --Minimum amount of different rewards
-        ['maxRewards'] = 3, --Max amount of different rewards
-        ['rewards'] = {
-            [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
-            [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
-            [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 25},
-            [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
-
-        },
+  [8] = {
+    ['name'] = 'prop_aircon_m_03',
+    ['size'] = 'medium',
+    ['minRewards'] = 1,
+    ['maxRewards'] = 3,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
+      [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
+      [3] = {['item'] = 'copper', ['min'] = 3, ['max'] = 20},
+      [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
     },
+  },
 
-    [5] = {
-        ['name'] = 'prop_aircon_l_04', -- Prop Model Name
-        ['minRewards'] = 1, --Minimum amount of different rewards
-        ['maxRewards'] = 3, --Max amount of different rewards
-        ['rewards'] = {
-            [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
-            [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
-            [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 25},
-            [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
-
-        },
+  [9] = {
+    ['name'] = 'prop_aircon_m_04',
+    ['size'] = 'medium',
+    ['minRewards'] = 1,
+    ['maxRewards'] = 3,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
+      [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
+      [3] = {['item'] = 'copper', ['min'] = 3, ['max'] = 20},
+      [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
     },
+  },
 
-    [6] = {
-        ['name'] = 'prop_aircon_m_01', -- Prop Model Name
-        ['minRewards'] = 1, --Minimum amount of different rewards
-        ['maxRewards'] = 3, --Max amount of different rewards
-        ['rewards'] = {
-            [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
-            [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
-            [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 25},
-            [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
-
-        },
+  [10] = {
+    ['name'] = 'prop_aircon_m_05',
+    ['size'] = 'medium',
+    ['minRewards'] = 1,
+    ['maxRewards'] = 3,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
+      [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
+      [3] = {['item'] = 'copper', ['min'] = 3, ['max'] = 20},
+      [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
     },
+  },
 
-    [7] = {
-        ['name'] = 'prop_aircon_m_02', -- Prop Model Name
-        ['minRewards'] = 1, --Minimum amount of different rewards
-        ['maxRewards'] = 3, --Max amount of different rewards
-        ['rewards'] = {
-            [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
-            [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
-            [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 25},
-            [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
-
-        },
+  [11] = {
+    ['name'] = 'prop_aircon_m_06',
+    ['size'] = 'small',
+    ['minRewards'] = 1,
+    ['maxRewards'] = 2,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
+      [2] = {['item'] = 'metalscrap', ['min'] = 4, ['max'] = 5},
+      [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 15},
+      [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 4},
     },
+  },
 
-    [8] = {
-        ['name'] = 'prop_aircon_m_03', -- Prop Model Name
-        ['minRewards'] = 1, --Minimum amount of different rewards
-        ['maxRewards'] = 3, --Max amount of different rewards
-        ['rewards'] = {
-            [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
-            [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
-            [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 25},
-            [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
-
-        },
+  [12] = {
+    ['name'] = 'prop_cablespool_02',
+    ['size'] = 'medium',
+    ['minRewards'] = 1,
+    ['maxRewards'] = 3,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
+      [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
+      [3] = {['item'] = 'copper', ['min'] = 3, ['max'] = 20},
+      [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
+      [5] = {['item'] = 'steel', ['min'] = 2, ['max'] = 5},
     },
+  },
 
-    [9] = {
-        ['name'] = 'prop_aircon_m_04', -- Prop Model Name
-        ['minRewards'] = 1, --Minimum amount of different rewards
-        ['maxRewards'] = 3, --Max amount of different rewards
-        ['rewards'] = {
-            [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
-            [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
-            [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 25},
-            [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
-
-        },
+  [13] = {
+    ['name'] = 'prop_cablespool_03',
+    ['size'] = 'medium',
+    ['minRewards'] = 1,
+    ['maxRewards'] = 3,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
+      [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
+      [3] = {['item'] = 'copper', ['min'] = 3, ['max'] = 20},
+      [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
+      [5] = {['item'] = 'steel', ['min'] = 2, ['max'] = 5},
     },
+  },
 
-    [10] = {
-        ['name'] = 'prop_aircon_m_05', -- Prop Model Name
-        ['minRewards'] = 1, --Minimum amount of different rewards
-        ['maxRewards'] = 3, --Max amount of different rewards
-        ['rewards'] = {
-            [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
-            [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
-            [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 25},
-            [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
-
-        },
+  [14] = {
+    ['name'] = 'prop_cablespool_05',
+    ['size'] = 'small',
+    ['minRewards'] = 1,
+    ['maxRewards'] = 2,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
+      [2] = {['item'] = 'metalscrap', ['min'] = 4, ['max'] = 5},
+      [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 15},
+      [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 4},
     },
+  },
 
-    [11] = {
-        ['name'] = 'prop_aircon_m_06', -- Prop Model Name
-        ['minRewards'] = 1, --Minimum amount of different rewards
-        ['maxRewards'] = 3, --Max amount of different rewards
-        ['rewards'] = {
-            [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
-            [2] = {['item'] = 'metalscrap', ['min'] = 5, ['max'] = 6},
-            [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 25},
-            [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 5},
-
-        },
+  [15] = {
+    ['name'] = 'prop_cablespool_06',
+    ['size'] = 'small',
+    ['minRewards'] = 1,
+    ['maxRewards'] = 2,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
+      [2] = {['item'] = 'metalscrap', ['min'] = 4, ['max'] = 5},
+      [3] = {['item'] = 'copper', ['min'] = 2, ['max'] = 15},
+      [4] = {['item'] = 'rubber', ['min'] = 2, ['max'] = 4},
     },
+  },
+
+  [16] = {
+    ['name'] = 'prop_roofvent_06a',
+    ['size'] = 'small',
+    ['minRewards'] = 1,
+    ['maxRewards'] = 2,
+    ['rewards'] = {
+      [1] = {['item'] = 'plastic', ['min'] = 1, ['max'] = 2},
+      [2] = {['item'] = 'metalscrap', ['min'] = 4, ['max'] = 5},
+      [3] = {['item'] = 'aluminum', ['min'] = 2, ['max'] = 15},
+      [4] = {['item'] = 'rubber', ['min'] = 1, ['max'] = 3},
+    },
+  },
 }
