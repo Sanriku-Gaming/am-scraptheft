@@ -16,6 +16,8 @@ Config.ScrapTime = {                    -- Time in seconds to steal scraps
   ['large'] = 60,
 }
 
+Config.DeleteObj = true                 -- Delete the object after scrapping
+
 Config.DispatchCaller = {
     'John',
     'James',

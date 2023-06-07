@@ -34,7 +34,9 @@ end)
 RegisterNetEvent('am-scraptheft:server:removescrap', function(entity, object)
 	table.insert(scrappedObj, entity)
   removedObj[#removedObj+1] = {coords = object.coords, model = object.model}
-  TriggerClientEvent('am-scraptheft:client:delete', -1, object)
+  if Config.DeleteObj then
+    TriggerClientEvent('am-scraptheft:client:delete', -1, object)
+  end
 end)
 
 RegisterNetEvent('am-scraptheft:server:itemhealth', function()
@@ -95,10 +97,10 @@ RegisterNetEvent('am-scraptheft:server:reward', function(scrapObj, clientToken)
       local rewardItemMin = rewardItem.min
       local rewardItemMax = rewardItem.max
       local rewardItemAmount = math.random(rewardItemMin, rewardItemMax)
-    
+
       Player.Functions.AddItem(rewardItem.item, rewardItemAmount)
       TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[rewardItem.item], 'add', rewardItemAmount)
-    
+
       table.remove(scrapObj.rewards, rewardIndex) -- Remove the rewarded item from the table
     end
 	else

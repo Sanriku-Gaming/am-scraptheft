@@ -8,6 +8,7 @@ local removedObj = {}
 --======================================--
 --Police Notification
 local function PoliceAlert(nearby)
+  local pos = GetEntityCoords(PlayerId())
 	local chance = nil
 	local day = false
 	local hours = GetClockHours()
@@ -74,7 +75,6 @@ end
 ------------------------------------------
 --======================================--
 RegisterNetEvent('am-scraptheft:client:steal',function(scrapObj, entity, securityToken)
-  local pos = GetEntityCoords(PlayerId())
   local clientToken = securityToken
   local objHash = GetHashKey(scrapObj.name)
   local size = scrapObj.size
@@ -117,9 +117,11 @@ RegisterNetEvent('am-scraptheft:client:steal',function(scrapObj, entity, securit
         {}, {}, function()
           -- This code runs if the progress bar completes successfully
           local coords = GetEntityCoords(entity)
-          local obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 0.1, objHash, false, false, false)
-          SetEntityAsMissionEntity(obj, true, true)
-          DeleteEntity(obj)
+          if Config.DeleteObj then
+            local obj = GetClosestObjectOfType(coords.x, coords.y, coords.z, 0.1, objHash, false, false, false)
+            SetEntityAsMissionEntity(obj, true, true)
+            DeleteEntity(obj)
+          end
           local object = {coords = coords, model = objHash}
           TriggerServerEvent('am-scraptheft:server:removescrap', entity, object)
           TriggerServerEvent('am-scraptheft:server:reward', scrapObj, clientToken)
@@ -139,16 +141,18 @@ RegisterNetEvent('am-scraptheft:client:delete', function(object)
   removedObj[#removedObj+1] = {coords = object.coords, model = object.model}
   local ent = GetClosestObjectOfType(object.coords.x, object.coords.y, object.coords.z, 0.1, object.model, false, false, false)
   if DoesEntityExist(ent) then
-      SetEntityAsMissionEntity(ent, 1, 1)
-      DeleteObject(ent)
-      SetEntityAsNoLongerNeeded(ent)
+    SetEntityAsMissionEntity(ent, 1, 1)
+    DeleteObject(ent)
+    SetEntityAsNoLongerNeeded(ent)
   end
 end)
 
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
-  QBCore.Functions.TriggerCallback('am-scraptheft:server:GetObjects', function(incObjects)
-    removedObj = incObjects
-  end)
+  if Config.DeleteObj then
+    QBCore.Functions.TriggerCallback('am-scraptheft:server:GetObjects', function(incObjects)
+      removedObj = incObjects
+    end)
+  end
 end)
 
 --======================================--
@@ -177,17 +181,19 @@ CreateThread(function()
 end)
 
 CreateThread(function()
-  while true do
-    for k = 1, #removedObj, 1 do
-      v = removedObj[k]
-      local ent = GetClosestObjectOfType(v.coords.x, v.coords.y, v.coords.z, 0.1, v.model, false, false, false)
-      if DoesEntityExist(ent) then
-          SetEntityAsMissionEntity(ent, 1, 1)
-          DeleteObject(ent)
-          SetEntityAsNoLongerNeeded(ent)
-          if Config.Debug then print('Entity Deleted:', ent, v.coords, v.model) end
+  if Config.DeleteObj then
+    while true do
+      for k = 1, #removedObj, 1 do
+        v = removedObj[k]
+        local ent = GetClosestObjectOfType(v.coords.x, v.coords.y, v.coords.z, 0.1, v.model, false, false, false)
+        if DoesEntityExist(ent) then
+            SetEntityAsMissionEntity(ent, 1, 1)
+            DeleteObject(ent)
+            SetEntityAsNoLongerNeeded(ent)
+            if Config.Debug then print('Entity Deleted:', ent, v.coords, v.model) end
+        end
       end
+      Wait(5000)
     end
-    Wait(5000)
   end
 end)
