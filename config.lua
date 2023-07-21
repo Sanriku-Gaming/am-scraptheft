@@ -17,6 +17,7 @@ Config.ScrapTime = {                    -- Time in seconds to steal scraps
 }
 
 Config.DeleteObj = true                 -- Delete the object after scrapping
+Config.DeleteDistance = 50.0            -- Distance to check for deleted objects
 
 Config.DispatchCaller = {
     'John',

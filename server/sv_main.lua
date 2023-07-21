@@ -1,14 +1,14 @@
 local QBCore = exports['qb-core']:GetCoreObject()
+local securityToken = math.random(1,99999999)
 local scrappedObj = {123456789}
 local removedObj = {}
-local securityToken = math.random(1,99999999)
+local InteractingScraps = {}
 
---====================================================================================
+--======================================--
 ------------------------------------------
---                CALLBACKS            --
+--                CALLBACKS             --
 ------------------------------------------
---====================================================================================
-
+--======================================--
 QBCore.Functions.CreateCallback('am-scraptheft:server:GetCops', function(source, cb)
 	local amount = 0
   local players = QBCore.Functions.GetQBPlayers()
@@ -24,13 +24,21 @@ QBCore.Functions.CreateCallback('am-scraptheft:server:GetObjects', function(sour
   cb(removedObj)
 end)
 
---====================================================================================
+QBCore.Functions.CreateCallback('am-scraptheft:server:checkInteract', function(source, cb, coords, model)
+  local key = coords.x .. coords.y .. coords.z .. model
+  if InteractingScraps[key] ~= nil then
+    cb(true) 
+  else
+    InteractingScraps[key] = {coords = coords, model = model}
+    cb(false)
+  end
+end)
+
+--======================================--
 ------------------------------------------
 --                EVENTS            --
 ------------------------------------------
---====================================================================================
-
-
+--======================================--
 RegisterNetEvent('am-scraptheft:server:removescrap', function(entity, object)
 	table.insert(scrappedObj, entity)
   removedObj[#removedObj+1] = {coords = object.coords, model = object.model}
@@ -79,6 +87,12 @@ RegisterNetEvent('am-scraptheft:server:checkifscrapped', function(scrapObj, enti
 	end
 end)
 
+RegisterNetEvent('am-scraptheft:server:stopInteracting', function(eventData)
+  local coords = eventData.coords 
+  local model = eventData.model
+  local key = coords.x .. coords.y .. coords.z .. model
+  InteractingScraps[key] = nil
+end)
 
 RegisterNetEvent('am-scraptheft:server:reward', function(scrapObj, clientToken)
 	local src = source
