@@ -149,6 +149,10 @@ RegisterNetEvent('am-scraptheft:client:steal',function(scrapObj, entity, securit
               end
               TriggerServerEvent('am-scraptheft:server:reward', scrapObj, clientToken)
               TriggerServerEvent('am-scraptheft:server:itemhealth')
+              if Config.EnableFingerprint and math.random(1, 100) <= Config.FingerprintChance then
+                  local pos = GetEntityCoords(PlayerPedId())
+                  TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
+              end
               ClearPedTasks(playerPed)
             end, function()
               -- This code runs if the progress bar gets cancelled
